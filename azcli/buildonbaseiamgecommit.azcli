@@ -1,0 +1,19 @@
+az acr build --registry $ACR_NAME --image baseimages/node:9-alpine --file Dockerfile-base .
+
+az acr task create \
+    --registry $ACR_NAME \
+    --name taskhelloworld \
+    --image helloworld:{{.Run.ID}} \
+    --arg REGISTRY_NAME=$ACR_NAME.azurecr.io \
+    --context https://github.com/$GIT_USER/acr-build-helloworld-node.git \
+    --file Dockerfile-app \
+    --git-access-token $GIT_PAT
+
+    #Use az acr task run to manually trigger the task and build the application image. This step is needed so that the task tracks the application image's dependency on the base image.
+    az acr task run --registry $ACR_NAME --name taskhelloworld
+
+    docker stop myapp
+
+    #list builds
+
+    az acr task list-runs --registry $ACR_NAME --output table

@@ -1,0 +1,11 @@
+az acr task create \
+  --name mytask \
+  --registry $ACR_NAME \
+  --cmd hello-world \
+  --schedule "0 21 * * *" \
+  --context /dev/null
+
+
+  az acr task show --name mytask --registry $ACR_NAME --output table
+  #after it runs 
+  az acr task list-runs --name mytask --registry myregistry --output table

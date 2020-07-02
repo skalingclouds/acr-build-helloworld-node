@@ -1,0 +1,16 @@
+ACR_NAME="skalingcloudsbase"
+GIT_USER="skalingclouds"
+GIT_PAT="d8751dcf60453c96a8eb156bce897cc59d235395"
+
+
+az acr task create \
+    --registry $ACR_NAME \
+    --name taskhelloworld \
+    --image helloworld:{{.Run.ID}} \
+    --context https://github.com/$GIT_USER/acr-build-helloworld-node.git \
+    --file Dockerfile \
+    --git-access-token $GIT_PAT
+
+    az acr task run --registry $ACR_NAME --name taskhelloworld
+
+
